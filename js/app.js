@@ -31,6 +31,9 @@ function eventListeners() {
             // Make the quotation
             const insurance = new Insurance(make, year, level);
             const price = insurance.calculateQuotation(insurance);
+
+            // Print the result fromHTMLUI();
+            html.showResult(price, insurance);
         }
     });
 };
@@ -86,13 +89,13 @@ Insurance.prototype.calculateQuotation = function(insurance) {
 
     price = this.calculateLevel(price, level);
 
-    console.log(price);
-    
+    return(price)
 }
 // Returns the difference between years
 Insurance.prototype.getYearDifference = function(year) {
     return new Date().getFullYear() - year
 }
+
 
 // Adds the value based on the level of protection
 Insurance.prototype.calculateLevel = function(price, level) {
@@ -148,4 +151,39 @@ HTMLUI.prototype.dispalyError = function(message) {
     setTimeout(function() {
         document.querySelector('.error').remove();
     }, 3000);
+}
+
+// Prints the result into HTML
+HTMLUI.prototype.showResult = function(price, insurance) {
+    // Print the result
+    const result = document.getElementById('result');
+
+    // Get Make from the object and assign a readeble name
+    let make = insurance.make;
+
+    switch(make) {
+        case '1':
+            make = 'American';
+            break;
+        case '2':
+            make = 'Asian';
+            break;
+        case '3':
+            make = 'Europian';
+            break;
+    }
+    // Create a div with the result 
+    const div = document.createElement('div');
+
+    // Insert the result
+    div.innerHTML = `
+        <p class="header">Summary</p>
+        <p>Make: ${make}</p>
+        <p>Year: ${insurance.year}</p>
+        <p> Level: ${insurance.level}</p>
+        <p class="total">Total: $ ${price}</p>
+    `
+
+    // Insert this into HTML
+    result.appendChild(div)
 }
